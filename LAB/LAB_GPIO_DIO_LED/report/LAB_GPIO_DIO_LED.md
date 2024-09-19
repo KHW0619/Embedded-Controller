@@ -4,7 +4,7 @@
 
 **Author/Partner:** Hee-Won Kim
 
-**Github:** repository link
+**Github:** [https://github.com/KHW0619/Embedded-Controller](https://github.com/KHW0619/Embedded-Controller)
 
 **Demo Video:** [PROBLEM 2](https://youtu.be/dBpTmBGsslo?si=eWhd61T4cr8Vwhls), [PROBLEM 3](https://youtu.be/FtCEHv_D8XM)
 
