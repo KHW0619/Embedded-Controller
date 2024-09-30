@@ -76,6 +76,5 @@ void clear_pending_EXTI(PinName_t pinName) {
 	ecPinmap(pinName,&port,&pin);
 
 	EXTI->PR |= (1 << pin);     // clear EXTI pending
-	// EXTI->PR &= ~(1 << pin);     // clear EXTI pending
 }
 

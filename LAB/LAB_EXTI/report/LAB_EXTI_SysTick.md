@@ -4,7 +4,7 @@
 
 **Author:** Hee-Won Kim
 
-**Github:** 
+**Github:** [https://github.com/KHW0619/Embedded-Controller/tree/master/LAB/LAB_EXTI](https://github.com/KHW0619/Embedded-Controller/tree/master/LAB/LAB_EXTI)
 
 **Demo Video:** [PROBLEM 1](https://youtu.be/jPIeNC17DnA), [PROBLEM 2](https://youtu.be/rx8KDd-bWiE)
 
@@ -86,20 +86,95 @@ Circuit Diagram
 
 1. We can use two different methods to detect an external signal: polling and interrupt. What are the advantages and disadvantages of each approach?
 
-> Answer discussion questions
-> 
-1. What would happen if the EXTI interrupt handler does not clear the interrupt pending flag? Check with your code
-    
-    > Answer discussion questions
+    > **polling**
     > 
+    > - advantage: This method is good for understanding code.
+    > - disadvantage: It can not keep the immediate response then the interrupt method, and it is slow then other one.
+    > 
+    > **interrupt**
+    >
+    > - advantage: This is efficient method because the code is operated only when a signal occurs.
+    > - disadvantage: It is quietly complex to implement.
+    > 
+
+2. What would happen if the EXTI interrupt handler does not clear the interrupt pending flag? Check with your code
+    
+    > It could checked by removing the clear_pending_EXTI function. The result shows the random numbers displayed to 7-segment display.
+    > I guess because of not clear the pending flag, variant cnt's increasing speed could be fast more. That guess could be the reason why display number was random.
 
 ### **My Code**
 
-Explain your source code with the necessary comments.
+> **Code Explain**
+>
+> The setup function is initialize all the pins using at this problem. It satisfies configuration.
+>
+> The while loop prevent the code from ending.
+>
+> If the button pin pressed, EXTI15_10_IRQHandler function will run. This function change the state at the rate of second.
 
 ```
-// YOUR MAIN CODE ONLY
-// YOUR CODE
+/*
+******************************************************************************
+* @author  Hee-Won Kim
+* @Mod	   2024-09-30 by KHW0619
+* @brief   Embedded Controller:  LAB_EXTI
+******************************************************************************
+*/
+
+#include "ecSTM32F4v2.h"
+
+#define BUTTON_PIN PC_13
+
+// display number state
+unsigned int cnt = 0;
+
+void setup(void)
+{
+    // setting system clock and initialize SysTick
+    RCC_PLL_init();
+    SysTick_init();
+
+    // Setting Output Pins (for 7-segment display)
+    sevensegment_display_init(PA_7, PB_6, PC_7, PA_9);  // Decoder input A,B,C,D
+
+    // Setting Input Pin
+    GPIO_init(BUTTON_PIN, INPUT);
+    GPIO_pupd(BUTTON_PIN, PULL_UP);
+
+    // initialize EXTI
+    EXTI_init(BUTTON_PIN, FALL, 0);
+}
+
+int main(void) {
+    // Initialiization --------------------------------------------------------
+    setup();
+
+    // Inifinite Loop ----------------------------------------------------------
+    while (1) {};
+}
+
+
+// EXTI for Pin 13
+// this function has software debouncing code
+void EXTI15_10_IRQHandler(void) {
+    for(int i = 0; i < 500000;i++){}  // delay_ms(500);
+    unsigned int button_state = GPIO_read(BUTTON_PIN);
+
+    if (is_pending_EXTI(BUTTON_PIN) && !button_state) {
+        for(int i = 0; i < 500000; i++) {};
+        button_state = GPIO_read(BUTTON_PIN);
+
+        if(!button_state)
+            // change the state
+            if(GPIO_read(BUTTON_PIN) == 0) cnt++;
+        if (cnt > 9) cnt = 0;
+
+        // set 7-segment display
+        sevensegment_display(cnt % 10);
+
+        clear_pending_EXTI(BUTTON_PIN);
+    }
+}
 ```
 
 ### **Results**
@@ -155,11 +230,76 @@ Circuit Diagram
 
 ### **My Code**
 
-Explain your source code with necessary comments.
+> **Code Explain**
+> 
+> The setup function is initialize all the pins using at this problem. It satisfies configuration.
+> 
+> In the while loop, 7-segment display change the state at the rate of second.
+> 
+> If the button pin pressed, EXTI15_10_IRQHandler function will run. This function reset '0' the display state.
 
 ```C
-// YOUR MAIN CODE ONLY
-// YOUR CODE
+/*
+******************************************************************************
+* @author  Hee-Won Kim
+* @Mod	   2024-09-30 by KHW0619
+* @brief   Embedded Controller:  LAB_EXTI_SysTick
+******************************************************************************
+*/
+#include "ecSTM32F4v2.h"
+
+// display number state
+int cnt = 0;
+
+void setup(void)
+{
+    // setting system clock and initialize SysTick
+    RCC_PLL_init();
+    SysTick_init();
+
+    // Setting Input Pin
+    GPIO_init(BUTTON_PIN, INPUT);
+    GPIO_pupd(BUTTON_PIN, PULL_UP);
+
+    // Setting Output Pins (for 7-segment display)
+    sevensegment_display_init(PA_7, PB_6, PC_7, PA_9);
+
+    // initialize EXTI
+    EXTI_init(BUTTON_PIN, FALL, 0);
+}
+
+int main(void) {
+    // Initialiization --------------------------------------------------------
+    setup();
+
+    // Inifinite Loop ----------------------------------------------------------
+    while(1){
+        // set 7-segment display
+        sevensegment_display(cnt);
+        delay_ms(1000);
+
+        // change the state
+        cnt++;
+        if (cnt > 9) cnt = 0;
+
+        // SysTick reset
+        SysTick_reset();
+    }
+}
+
+
+//EXTI for Pin 13
+void EXTI15_10_IRQHandler(void) {
+    unsigned int button_state = GPIO_read(BUTTON_PIN);
+
+    if (is_pending_EXTI(BUTTON_PIN) && !button_state) {
+        // setting the display to '0'
+        cnt = -1;
+
+        clear_pending_EXTI(BUTTON_PIN);
+    }
+}
+
 ```
 
 ### **Results**
