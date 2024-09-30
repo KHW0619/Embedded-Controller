@@ -24,7 +24,7 @@ void RCC_HSI_init() {
 		EC_SYSCLK=16000000;
 }
 
-void RCC_PLL_init() {	
+void RCC_PLL_init() {
 	// To correctly read data from FLASH memory, the number of wait states (LATENCY)
   // must be correctly programmed according to the frequency of the CPU clock
   // (HCLK) and the supply voltage of the device.		

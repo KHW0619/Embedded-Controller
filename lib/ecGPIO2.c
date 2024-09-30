@@ -15,6 +15,7 @@ Description      : Distributed to Students for LAB_GPIO
 #include "ecGPIO2.h"
 PinName_t SEVEN_SEGMENT_PIN[4] = {PA_7, PB_6, PC_7, PA_9};
 PinName_t SEVEN_SEGMENT_DECODER_PIN[8] = {PA_5, PA_6, PA_7, PB_6, PC_7, PA_9, PA_8, PB_10};
+static int input_pin_state = 0;
 
 void GPIO_init(PinName_t pinName, uint32_t mode){     
 	GPIO_TypeDef * Port;
@@ -157,3 +158,8 @@ void sevensegment_decoder(uint8_t  num) {
 		GPIO_write(SEVEN_SEGMENT_DECODER_PIN[i], seven_segment_decoder_state[i]);
 	}
 }
+
+void LED_toggle(void) {
+	input_pin_state ^= 1;
+	GPIO_write(LED_PIN, input_pin_state);
+};

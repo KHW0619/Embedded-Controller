@@ -13,7 +13,6 @@ Description      : Distributed to Students for LAB_GPIO
 #define __ECGPIO2_H
 
 #include "stm32f411xe.h"
-#include "ecRCC2.h"
 #include "ecPinNames.h"
 
 #define INPUT  0x00
@@ -24,7 +23,7 @@ Description      : Distributed to Students for LAB_GPIO
 #define HIGH 1
 #define LOW  0
 
-// #define LED_PIN    PA_5 //Find LED Port&Pin and Fill the blank
+#define LED_PIN    PA_5 //Find LED Port&Pin and Fill the blank
 #define BUTTON_PIN PC_13 //Find BTN Port&Pin and Fill the blank
 
 typedef enum {
@@ -61,6 +60,7 @@ void sevensegment_display_init(PinName_t pinNameA, PinName_t pinNameB, PinName_t
 void sevensegment_display(uint8_t  num);
 void sevensegment_decoder_init(void);
 void sevensegment_decoder(uint8_t  num);
+void LED_toggle(void);
 
 #ifdef __cplusplus
 }
