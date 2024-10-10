@@ -1,7 +1,5 @@
 #include "ecSysTick2.h"
 
-
-
 #define MCU_CLK_PLL 84000000
 #define MCU_CLK_HSI 16000000
 
