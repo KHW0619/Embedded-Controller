@@ -29,10 +29,9 @@ void PWM_init(PinName_t pinName){
 // 1. Initialize GPIO port and pin as AF	
 	GPIO_init(pinName, AF);  // AF=2
 	GPIO_otype(pinName, PUSH_PULL); 	//if necessary
-	GPIO_pupd(pinName, PULL_UP); 					//if necessary
+	GPIO_pupd(pinName, NO_PUPD); 					//if necessary
 	GPIO_ospeed(pinName, FAST_SPEED);
-	
-	
+
 // 2. Configure GPIO AFR by Pin num.	
 	//  AFR[0] for pin: 0~7,     AFR[1] for pin 8~15
 	//  AFR=1 for TIM1,TIM2	AFR=2 for TIM3 etc

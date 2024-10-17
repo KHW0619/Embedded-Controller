@@ -6,7 +6,7 @@
 
 **Author/Partner:** Hee-Won Kim
 
-**Github:** []()
+**Github:** [https://github.com/KHW0619/Embedded-Controller/tree/master/LAB/LAB_PWM](https://github.com/KHW0619/Embedded-Controller/tree/master/LAB/LAB_PWM)
 
 **Demo Video:** [PROBLEM1](https://youtu.be/8sHyCdwSkLk), [PROBLEM2](https://youtu.be/Vvxr0c5Cq2U)
 
@@ -124,11 +124,27 @@ void PWM_duty(PinName_t pinName, float duty);
 
 1. Derive a simple logic to calculate CRR and ARR values to generate x[Hz] and y[%] duty ratio of PWM. How can you read the values of input clock frequency and PSC?
 
-> Answer discussion questions
+    > The clock frequency for counter $ F_{ck\_cnt} $ is obtained by dividing the clock frequency for prescaler $ F_{ck\_psc} $ by $ PSC + 1 $. The PWM frequency is then derived by dividing the timer frequency by $ ARR + 1 $, which means the counter resets when it reaches the ARR value.
+    > 
+    > The equation is as follows:
+    $$ F_{ck\_cnt} = \frac{F_{ck\_psc}}{PSC + 1} $$
+    $$ F_{PWM} = \frac{F_{ck\_cnt}}{ARR + 1} $$
+    $$ ∴  F_{PWM} = \frac{F_{ck\_psc}}{(PSC + 1) * (ARR + 1)}$$
 
-2. What is the smallest and highest PWM frequency that can be generated for Q1?
+   2. What is the smallest and highest PWM frequency that can be generated for Q1?
     
-    > Answer discussion questions
+    > First of all, assuming that $ F_{ck\_psc} $ is fixed at 84MHz.
+    > 
+    >    smallest PWM frequency: PSC and ARR values should be the highest value. In the reference manual, It shows PSC[15:0]: Prescaler value and ARR[15:0]: Auto-reload value. So, The highest value is 0b1111 1111 1111 1111 (= 0xFFFF = 65535) both PSC and ARR. When the value is input, it will be as follows.
+    >
+    >    $$ F_{PWM} = \frac{F_{ck\_psc}}{(PSC + 1) * (ARR + 1)}$$
+        $$  F_{PWM} = \frac{F_{ck\_psc}}{(65535 + 1) * (65535 + 1)}$$
+        $$ ∴  F_{PWM} = 0.0196 [Hz]$$
+        highest PWM frequency: PSC and ARR values should be the smallest value. So, The smallest value is 0b0000 (= 0x0 = 0) both PSC and ARR. When the value is input, it will be as follows.
+    >
+    >    $$  F_{PWM} = \frac{F_{ck\_psc}}{(PSC + 1) * (ARR + 1)}$$
+        $$  F_{PWM} = \frac{F_{ck\_psc}}{(0 + 1) * (0 + 1)}$$
+        $$  F_{PWM} = 84 [MHz] $$
 
 ### **My Code**
 

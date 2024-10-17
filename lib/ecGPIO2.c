@@ -117,6 +117,12 @@ void sevensegment_display(uint8_t num) {
 	for(int i = 0; i < 4; i++) {
 		GPIO_write(SEVEN_SEGMENT_PIN[3 - i], (num >> i) & ( 1 ));
 	}
+	if(num == 10) {
+		GPIO_write(SEVEN_SEGMENT_PIN[0],1);
+		GPIO_write(SEVEN_SEGMENT_PIN[1],1);
+		GPIO_write(SEVEN_SEGMENT_PIN[2],1);
+		GPIO_write(SEVEN_SEGMENT_PIN[3],1);
+	}
 }
 
 void sevensegment_decoder_init(void) {
