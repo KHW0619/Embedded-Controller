@@ -4,9 +4,9 @@
 
 **Author:** Hee-Won Kim
 
-**Github:** repository link
+**Github:** [https://github.com/KHW0619/Embedded-Controller/tree/master/LAB/LAB_TIMER_ICAP](https://github.com/KHW0619/Embedded-Controller/tree/master/LAB/LAB_TIMER_ICAP)
 
-**Demo Video:** Youtube link
+**Demo Video:** [PROBLEM2](https://youtube.com/shorts/EKoXdMHnV0w?feature=share)
 
 ## **Introduction**
 
@@ -191,7 +191,11 @@ The program needs to
 
 1. There can be an over-capture case, when a new capture interrupt occurs before reading the CCR value. When does it occur and how can you calculate the time span accurately between two captures?
 
-> Answer discussion questions
+> To prevent a over-capture case, increase the interval at which the capture interrupt occurs.
+> 
+> To calculate the time span accurately between two captures, decrease the interval at which the capture interrupt occurs.
+> 
+> It is necessary to find the appropriate interval for the time interrupt to occur.
  
 2. In the tutorial, what is the accuracy when measuring the period of 1Hz square wave? Show your result.
 
