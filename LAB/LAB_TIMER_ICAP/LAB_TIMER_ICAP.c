@@ -7,7 +7,6 @@
 */
 
 #include "stm32f411xe.h"
-#include "math.h"
 #include "ecSTM32F4v2.h"
 
 uint32_t ovf_cnt = 0;
@@ -18,6 +17,8 @@ float time2 = 0;
 
 #define TRIG PA_6
 #define ECHO PB_6
+//#define TRIG PA_8
+//#define ECHO PB_6
 
 void setup(void);
 

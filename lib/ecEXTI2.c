@@ -2,7 +2,6 @@
 #include "ecSysTick2.h"
 #include "ecEXTI2.h"
 
-
 void EXTI_init(PinName_t pinName, int trig_type,int priority){
 
 	GPIO_TypeDef *port;
