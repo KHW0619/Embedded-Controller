@@ -9,7 +9,7 @@
 #include "ecSTM32F4v2.h"
 
 #define BUTTON_PIN PC_13
-#define PWM_PIN PA_0
+#define PWM_PIN PB_10
 #define DIR_PIN PC_2
 
 void setup(void);
@@ -82,8 +82,9 @@ void TIM3_IRQHandler(void) {
 }
 
 
+
 void EXTI15_10_IRQHandler(void) {
-    for(int i = 0; i < 500000;i++){}  // delay_ms(500);
+    for(int i = 0; i < 500000; i++){}  // delay_ms(500);
     unsigned int button_state = GPIO_read(BUTTON_PIN);
 
     if (is_pending_EXTI(BUTTON_PIN) && !button_state) {

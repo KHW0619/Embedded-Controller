@@ -4,11 +4,9 @@
 
 **Author/Partner:** Yuha Park & Heewon Kim
 
-**Github:** repository link
+**Github:** [https://github.com/KHW0619/Embedded-Controller/tree/master/LAB/LAB_RCcar](https://github.com/KHW0619/Embedded-Controller/tree/master/LAB/LAB_RCcar)
 
 **Demo Video:** [RCcar_Auto_mode test video](https://youtu.be/npX0aMinxLI), [RCcar_Manual_mode test video](https://youtu.be/XliCU_yTtSo)
-
-**PDF version:**
 
 ## Introduction
 
@@ -36,15 +34,6 @@ Design an embedded system to control an RC car to drive on the racing track. The
 - Keil uVision, CMSIS, EC_HAL library
 
 ## Preparation
-
-### Tutorials:
-
-Complete the following tutorials:
-
-1. [TU: Managing library header files](https://ykkim.gitbook.io/ec/ec-course/tutorial/tutorial-library-header-files)
-2. [TU: Custom initialization](https://ykkim.gitbook.io/ec/ec-course/tutorial/tutorial-custom-initialization)
-
-Use `ecSTM32F411.h` and `void MCU_init(void)` in your project code.
 
 ### LABS:
 
@@ -154,20 +143,47 @@ On the PC, connected to MCU via bluetooth
 | GPIO          | GPIOB        | PB_0, PB_1   | Analog Mode No Pull-up Pull-down                             |
 | JADC          | JADC1        | PB_0, PB_1   | ADC Clock Prescaler /8 12-bit resolution, right alignment Continuous Conversion mode Scan mode: Two channels in regular group External Trigger (Timer5 Trigger) @ 1kHz Trigger Detection on Rising Edge |
 
-
-
-1. Create a new project under the directory `\repos\EC\LAB\LAB_RCcar`
-
-- The project name is “**LAB_RCcar”**
-- You can share the same code with your teammate. But need to write the report individually
-
 ### Circuit Diagram
 
-> You need to include the circuit diagram
+![digram](image/diagram.jpg)
 
-![img](https://ykkim.gitbook.io/~gitbook/image?url=https%3A%2F%2Fuser-images.githubusercontent.com%2F38373000%2F192134563-72f68b29-4127-42ac-b064-2eda95a9a52a.png&width=768&dpr=4&quality=100&sign=60f2bbed&sv=1)
+<img src="./image/RCcar.jpg" width="550" height="400">
 
+### Flow Chart
 
+```mermaid
+%%{init: {'theme': 'default', 'themeVariables': { 'fontSize': '24px' }}}%%
+graph TD
+    subgraph RC_car
+        start((Start)) --> ifBTM{USART1_BT == M or m}
+
+        ifBTM --> |yes| change_mode2m[RC_mode = MANUAL_MODE]
+        ifBTM -->  |no| ifBTA{USART1_BT == A or a}
+
+        ifBTA --> |yes| change_mode2a[RC_mode = AUTO_MODE]
+        ifBTA -->  |no| ifRCM{RC_mode == MANUAL_MODE}
+
+        ifRCM --> |yes| manual_mode["USART1_BT 명령 수행\ncontrol_vehicle() 함수 사용"]
+        ifRCM -->  |no| ifRCA{RC_mode == AUTO_MODE}
+        
+        ifRCA --> |yes| auto_mode["sensor data를 통한 명령 수행"]
+    end
+    
+    subgraph sensor_data
+        USART1_BT[/USART1_BT/]
+        IR_RIGHT[/IR_RIGHT/]
+        IR_LEFT[/IR_LEFT/]
+        ULTRASONIC[/ULTRASONIC/]
+    end
+
+    USART1_BT --> ifBTM
+    
+    IR_RIGHT --> auto_mode
+    IR_LEFT --> auto_mode
+    ULTRASONIC --> auto_mode
+    
+%%    style sign stroke: gray, stroke-width: 2px, fill: #E0FFFF,color:#000000
+```
 
 ### Header code
 
@@ -661,12 +677,10 @@ void setup(void){
 >- Set the direction and PWM values of the left and right wheels to finally control the movement of the vehicle.
 
 
-
 - Function `USART1_IRQHandler`: This is an interrupt function that handles Bluetooth (UART1) communication.
 
 > - Special key (directional key) processing:
 > - The direction keys receive three numbers in a row. `27`, `91`, `(num)`. When `27` is input first, `specific_key_state = 1` becomes, and when `91` is input right away, `specific_key_state = 2` becomes. Then, it recognizes that it is a special key, and the last third number`(num)` determines which key it is. If a special key other than the left, right, up, and down arrow keys is entered, `specific_key_state = -1` is set. If `specific_key_state = -1` is not, `control_vehicle(BT_Data)` is executed. If it is not a special key, `control_vehicle(BT_Data)` is executed immediately.
-
 
 
 - Function `ADC_IRQHandler`: This is a function that reads IR sensor data and determines vehicle operation in automatic driving mode.
@@ -707,10 +721,6 @@ void setup(void){
 > In AUTO mode, if `ICAP_Small_State` is `ICAP_MIN_STOP_NUM = 3` or more, it judges that there is an obstacle and stops. >
 > If `ICAP_Large_State` is greater than `ICAP_MIN_STOP_NUM = 3`, it is determined that there is no obstacle and moves at the original speed.
 
-
-
-
-
 ## Results
 
 <img src="./image/RCcar.jpg" width="550" height="400">
@@ -734,8 +744,6 @@ void setup(void){
 >   - If driving direction is backward, `DIR: 0`
 > - Emergency Stop
 >   - RC car must stop running when key “S” is pressed.
-
-
 
 [RCcar_Manual_mode test video](https://youtu.be/XliCU_yTtSo)
 

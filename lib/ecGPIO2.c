@@ -13,6 +13,7 @@ Description      : Distributed to Students for LAB_GPIO
 #include "stm32f4xx.h"
 #include "stm32f411xe.h"
 #include "ecGPIO2.h"
+
 PinName_t SEVEN_SEGMENT_PIN[4] = {PA_7, PB_6, PC_7, PA_9};
 PinName_t SEVEN_SEGMENT_DECODER_PIN[8] = {PA_5, PA_6, PA_7, PB_6, PC_7, PA_9, PA_8, PB_10};
 static int input_pin_state = 0;

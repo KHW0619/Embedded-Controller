@@ -66,9 +66,6 @@ void TIM3_IRQHandler(void) {
 
     // Check TIM3 UIF
     if(is_UIF(TIM3)){
-
-
-
         if(count > counting_rate && counting_rate != 3) { // counting_rate = 2 (1 sec) counting_rate = 1 (0.5 sec)
             // reset counter
 

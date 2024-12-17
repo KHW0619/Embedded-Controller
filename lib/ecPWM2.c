@@ -40,9 +40,15 @@ void PWM_init(PinName_t pinName){
 
 	port->AFR[index] &= ~(0b1111 << pin * 4);
 
-	if(TIMx == TIM1 || TIMx == TIM2) port->AFR[index] |= 0b0001 << pin * 4;
-	else if(TIMx == TIM3 || TIMx == TIM4 || TIMx == TIM5) port->AFR[index] |= 0b0010 << pin * 4;
-	else if(TIMx == TIM9 || TIMx == TIM10 || TIMx == TIM11) port->AFR[index] |= 0b0011 << pin * 4;
+	// if(TIMx == TIM1 || TIMx == TIM2) port->AFR[index] |= 0b0001 << pin * 4;
+	// else if(TIMx == TIM3 || TIMx == TIM4 || TIMx == TIM5) port->AFR[index] |= 0b0010 << pin * 4;
+	// else if(TIMx == TIM9 || TIMx == TIM10 || TIMx == TIM11) port->AFR[index] |= 0b0011 << pin * 4;
+
+	if(TIMx == TIM1 || TIMx == TIM2) port->AFR[index] |= 0b0001 << (pin%8 * 4);
+	else if(TIMx == TIM3 || TIMx == TIM4 || TIMx == TIM5) port->AFR[index] |= 0b0010 << (pin%8 * 4);
+	else if(TIMx == TIM9 || TIMx == TIM10 || TIMx == TIM11) port->AFR[index] |= 0b0011 << (pin%8 * 4);
+
+
 
 // 3. Initialize Timer 
 	TIM_init(TIMx, 1);	// with default msec=1msec value.		
@@ -97,7 +103,6 @@ void PWM_init(PinName_t pinName){
 /* PWM PERIOD SETUP */
 // allowable range for msec:  1~2,000
 void PWM_period_ms(PinName_t pinName,  uint32_t msec){
-	
 // 0. Match TIMx from  Port and Pin 	
 	GPIO_TypeDef *port;
 	unsigned int pin;	
@@ -105,11 +110,9 @@ void PWM_period_ms(PinName_t pinName,  uint32_t msec){
 	TIM_TypeDef *TIMx;
 	int chN;		
 	PWM_pinmap(pinName, &TIMx, &chN);
-	
-	
+
 // 1. Set Counter Period in msec
 	TIM_period_ms(TIMx, msec);
-	
 }
 
 
