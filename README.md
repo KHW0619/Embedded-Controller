@@ -5,6 +5,8 @@ _School of Mechanical and Control Engineering_
 
 **Author:** Heewon Kim
 
+**E-mail:** kimheewon1960@gmail.com
+
 ---
 ### TUTORIAL
 - [Tutorial 1: EXTI](https://github.com/KHW0619/Embedded-Controller/tree/master/Tutorial/TU_EXTI)
